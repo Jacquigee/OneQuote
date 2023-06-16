@@ -63,7 +63,7 @@ fun HeaderNavigation(navItems: List<Page>, selectedPage: Page, onClick: (Page) -
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .clip(MaterialTheme.shapes.medium)
-                    .clickable { onClick( it ) }
+                    .clickable { onClick(it) }
                     .background(
                         color = MaterialTheme.colorScheme.surface,
                         shape = MaterialTheme.shapes.medium
@@ -99,6 +99,7 @@ fun OneQuote() {
             .background(color = MaterialTheme.colorScheme.background)
     ) {
 
+        HeaderNavigation(navItems = pages, selectedPage = selectedPage, onClick = {selectedPage = it})
         //Page content
 
         when (selectedPage.title) {
