@@ -17,16 +17,15 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onequote.ui.theme.OneQuoteTheme
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +41,10 @@ class MainActivity : ComponentActivity() {
 data class Page(val title: String, val color: Color)
 
 @Composable
-fun HeaderNavigation(navItems: List<Page>, selectedPage: Page, onClick: (Page) -> Unit) {
+fun HeaderNavigation(
+    navigation: AppState.Navigation,
+    onClick: (Page) -> Unit
+) {
 
     Row(
         modifier = Modifier
@@ -55,8 +57,8 @@ fun HeaderNavigation(navItems: List<Page>, selectedPage: Page, onClick: (Page) -
             )
             .padding(vertical = 16.dp)
     ) {
-        navItems.forEach {
-            val isSelected = it.title == selectedPage.title
+        navigation.navItems.forEach {
+            val isSelected = it.title == navigation.selectedPage.title
             val weight = if (isSelected) FontWeight.Normal else FontWeight.Light
             Text(text = it.title,
                 fontWeight = weight,
@@ -84,24 +86,22 @@ fun HeaderNavigation(navItems: List<Page>, selectedPage: Page, onClick: (Page) -
 }
 
 @Composable
-fun OneQuote() {
-    val pages = buildList {
-        add(Page("Page 1", Color.Red))
-        add(Page("Page 2", Color.Green))
-        add(Page("Page 3", Color.Blue))
-    }
-
-    var selectedPage by remember { mutableStateOf(pages[0]) }
-
+fun OneQuote(
+    mainViewModel: MainActivityViewModel = viewModel()
+) {
+    val appState = mainViewModel.appState.collectAsStateWithLifecycle()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.background)
     ) {
 
-        HeaderNavigation(navItems = pages, selectedPage = selectedPage, onClick = {selectedPage = it})
+        HeaderNavigation(
+            navigation = appState.value.navigation,
+            onClick = { mainViewModel.selectPage(it) })
         //Page content
 
+        val selectedPage = appState.value.navigation.selectedPage
         when (selectedPage.title) {
             "Page 1" -> {
                 TempContent(selectedPage.color)
