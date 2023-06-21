@@ -24,6 +24,8 @@ fun OneQuote(
     mainViewModel: MainActivityViewModel = viewModel()
 ) {
     val appState by mainViewModel.appState.collectAsStateWithLifecycle()
+
+    mainViewModel.fetchData()
     Column(
         modifier = Modifier
             .fillMaxSize()
