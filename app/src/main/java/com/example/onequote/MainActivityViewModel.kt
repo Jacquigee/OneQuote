@@ -1,11 +1,11 @@
 package com.example.onequote
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.onequote.AppState.Navigation.Page
 import com.example.onequote.network.QuoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,8 +29,16 @@ class MainActivityViewModel @Inject constructor(
             )
         }
     }
-    fun fetchData() = viewModelScope.launch {
+
+    fun fetchQuoteOfTheDay() = viewModelScope.launch {
+        delay(1500)
         val quoteOfTheDayResponse = quoteRepository.getQuoteOfTheDay()
-        Log.e("RESPONSE", quoteOfTheDayResponse?.toString() ?: "failed to fetch")
+        quoteOfTheDayResponse?.let { quoteFromApi ->
+            _appState.update {
+                return@update it.copy(
+                    quoteOfTheDay = quoteOfTheDayResponse
+                )
+            }
+        }
     }
 }
