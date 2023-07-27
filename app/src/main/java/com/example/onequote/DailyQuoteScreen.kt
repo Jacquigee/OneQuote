@@ -28,13 +28,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.onequote.network.NetworkOperation
 
 
 @Composable
-fun DailyQuoteScreen(quote: AppState.Quote, onFavoriteQuote: (AppState.Quote) -> Unit) {
+fun DailyQuoteScreen(
+    networkOperation: NetworkOperation<AppState.Quote>, onFavouriteClicked: (AppState.Quote) -> Unit
+) {
+    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
+        when (networkOperation) {
+            is NetworkOperation.Failure -> {}
+            is NetworkOperation.Loading -> {}
+            is NetworkOperation.Success -> {}
+        }
+       networkOperation.onLoading {
+
+       }
+        networkOperation.onFailure {
+
+        }
+        networkOperation.onSuccess {
+
+        }
+    }
+}
+
+@Composable
+fun DailyQuoteContent(
+    quote: AppState.Quote, onFavoriteQuote: (AppState.Quote) -> Unit
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center
+        modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier

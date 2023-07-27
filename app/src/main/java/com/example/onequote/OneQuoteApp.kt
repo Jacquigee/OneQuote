@@ -80,7 +80,7 @@ fun OneQuote(
                 TempContent(selectedPage.color)
             }
 
-            "Daily quote" -> DailyQuoteScreen(
+            "Daily quote" -> DailyQuoteContent(
                 quote = appState.quoteOfTheDay,
                 onFavoriteQuote = {
                     //todo handle onClick
