@@ -1,10 +1,11 @@
 package com.example.onequote
 
 import androidx.compose.ui.graphics.Color
+import com.example.onequote.network.NetworkOperation
 
 data class AppState(
     val navigation: Navigation,
-    val quoteOfTheDay: Quote
+    val quoteOfTheDay: NetworkOperation<Quote> = NetworkOperation.Loading()
 ) {
     data class Quote(val displayText: String, val author: String, val isFavorite: Boolean)
     data class Navigation(
@@ -24,11 +25,6 @@ data class AppState(
             return AppState(
                 navigation = Navigation(
                     navItems = pages, selectedPage = pages[1]
-                ),
-                quoteOfTheDay = Quote(
-                    displayText = "Nothing good ever comes from violence.",
-                    author = "Martin Luther",
-                    isFavorite = true
                 )
             )
         }

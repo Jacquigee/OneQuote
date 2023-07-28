@@ -41,21 +41,36 @@ fun DailyQuoteScreen(
             is NetworkOperation.Loading -> {}
             is NetworkOperation.Success -> {}
         }
-       networkOperation.onLoading {
-
-       }
-        networkOperation.onFailure {
-
-        }
-        networkOperation.onSuccess {
-
+        networkOperation.onLoading { placeholderQuote: AppState.Quote? ->
+            DailyQuoteContent(
+                quoteText = placeholderQuote?.displayText ?: "Loading",
+                quoteAuthor = placeholderQuote?.author ?: "The Valiant Dev",
+                isFavourite = placeholderQuote?.isFavorite ?: false,
+                onClick = {}
+            )
+        }.onSuccess { quote ->
+            DailyQuoteContent(
+                quoteText = quote.displayText,
+                quoteAuthor = quote.author,
+                isFavourite = quote.isFavorite,
+                onClick = { onFavouriteClicked(quote) }
+            )
+        }.onFailure { errorReason ->
+            DailyQuoteContent(
+                quoteText = errorReason,
+                quoteAuthor = "The Valiant Dev",
+                isFavourite = false,
+                onClick = { })
         }
     }
 }
 
 @Composable
 fun DailyQuoteContent(
-    quote: AppState.Quote, onFavoriteQuote: (AppState.Quote) -> Unit
+    quoteText: String,
+    quoteAuthor: String,
+    isFavourite: Boolean,
+    onClick: (() -> Unit)? = null
 ) {
     Column(
         modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center
@@ -69,7 +84,7 @@ fun DailyQuoteContent(
                 .clip(shape = MaterialTheme.shapes.large)
         ) {
             Text(
-                text = quote.displayText,
+                text = quoteText,
                 modifier = Modifier
                     .align(Alignment.TopCenter)
                     .padding(horizontal = 32.dp, vertical = 50.dp),
@@ -79,7 +94,7 @@ fun DailyQuoteContent(
                 fontFamily = FontFamily.Cursive
             )
             Text(
-                text = quote.author,
+                text = quoteAuthor,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .fillMaxWidth()
@@ -100,11 +115,11 @@ fun DailyQuoteContent(
                     .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(50))
                     .clip(RoundedCornerShape(50))
                     .clickable {
-                        onFavoriteQuote(quote)
+                        onClick?.invoke()
                     }
             ) {
                 Icon(
-                    imageVector = if (quote.isFavorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                    imageVector = if (isFavourite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
                     contentDescription = "Favorite Icon",
                     modifier = Modifier.align(Alignment.Center),
                     tint = Color.White
