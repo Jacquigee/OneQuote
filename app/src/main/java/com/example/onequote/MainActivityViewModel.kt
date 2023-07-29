@@ -3,6 +3,7 @@ package com.example.onequote
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.onequote.AppState.Navigation.Page
+import com.example.onequote.network.NetworkOperation
 import com.example.onequote.network.QuoteRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -31,12 +32,14 @@ class MainActivityViewModel @Inject constructor(
     }
 
     fun fetchQuoteOfTheDay() = viewModelScope.launch {
-        delay(1500)
+        _appState.update {
+            return@update it.copy(quoteOfTheDay = NetworkOperation.Loading())
+        }
         val quoteOfTheDayResponse = quoteRepository.getQuoteOfTheDay()
         quoteOfTheDayResponse?.let { quoteFromApi ->
             _appState.update {
                 return@update it.copy(
-                    quoteOfTheDay = quoteOfTheDayResponse
+                    quoteOfTheDay = quoteRepository.getQuoteOfTheDay()
                 )
             }
         }
