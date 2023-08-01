@@ -84,7 +84,11 @@ fun OneQuote(
                 networkOperation = appState.quoteOfTheDay,
                 onFavouriteClicked = {
                     //todo handle onClick
-                })
+                },
+            onRefresh = {
+                mainViewModel.fetchQuoteOfTheDay()
+            }
+                )
 
             "Favorites" -> {
                 TempContent(selectedPage.color)

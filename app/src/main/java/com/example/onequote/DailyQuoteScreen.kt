@@ -1,5 +1,6 @@
 package com.example.onequote
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -29,11 +30,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.onequote.network.NetworkOperation
+import com.example.onequote.ui.theme.Purple40
 
 
 @Composable
 fun DailyQuoteScreen(
-    networkOperation: NetworkOperation<AppState.Quote>, onFavouriteClicked: (AppState.Quote) -> Unit
+    networkOperation: NetworkOperation<AppState.Quote>,
+    onFavouriteClicked: (AppState.Quote) -> Unit,
+    onRefresh: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center) {
         when (networkOperation) {
@@ -62,6 +66,30 @@ fun DailyQuoteScreen(
                 isFavourite = false,
                 onClick = { })
         }
+
+        val backgroundColor = animateColorAsState(
+            targetValue = when (networkOperation) {
+                is NetworkOperation.Failure -> Color.Red
+                is NetworkOperation.Loading -> Color.Yellow
+                is NetworkOperation.Success -> Purple40
+            }
+        )
+        Text(
+            text = when (networkOperation) {
+                is NetworkOperation.Failure -> "Failure"
+                is NetworkOperation.Loading -> "Loading"
+                is NetworkOperation.Success -> "Up to date"
+            },
+            modifier = Modifier
+                .padding(top = 48.dp)
+                .background(
+                    color = backgroundColor.value,
+                    shape = MaterialTheme.shapes.medium
+                )
+                .clip(MaterialTheme.shapes.medium)
+                .clickable { onRefresh() }
+                .padding(horizontal = 8.dp, vertical = 16.dp)
+        )
     }
 }
 
