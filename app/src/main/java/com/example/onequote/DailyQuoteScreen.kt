@@ -21,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -71,7 +72,7 @@ fun DailyQuoteScreen(
             targetValue = when (networkOperation) {
                 is NetworkOperation.Failure -> Color.Red
                 is NetworkOperation.Loading -> Color.Yellow
-                is NetworkOperation.Success -> Purple40
+                is NetworkOperation.Success -> Color.White
             }
         )
         Text(
@@ -81,14 +82,15 @@ fun DailyQuoteScreen(
                 is NetworkOperation.Success -> "Up to date"
             },
             modifier = Modifier
-                .padding(top = 48.dp)
+                .padding(top = 28.dp)
                 .background(
                     color = backgroundColor.value,
                     shape = MaterialTheme.shapes.medium
                 )
                 .clip(MaterialTheme.shapes.medium)
                 .clickable { onRefresh() }
-                .padding(horizontal = 8.dp, vertical = 16.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .align(CenterHorizontally)
         )
     }
 }
