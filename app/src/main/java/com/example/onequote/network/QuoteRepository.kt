@@ -18,4 +18,14 @@ class QuoteRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun getAllQuotes(): NetworkOperation<List<AppState.Quote>>{
+        return quoteService.getAllQuotes().run {
+            if (isSuccessful){
+                NetworkOperation.Success(data = body()!!.map { quoteMapper.buildFrom(it) })
+            } else {
+                NetworkOperation.Failure(reason = "Unable to fetch quote of the day")
+            }
+        }
+    }
 }

@@ -5,8 +5,9 @@ import com.example.onequote.network.NetworkOperation
 
 data class AppState(
     val navigation: Navigation,
-    val quoteOfTheDay: NetworkOperation<Quote> = NetworkOperation.Loading()
-) {
+    val quoteOfTheDay: NetworkOperation<Quote> = NetworkOperation.Loading(),
+    val allQuotes: NetworkOperation<List<Quote>> = NetworkOperation.Loading()
+ ) {
     data class Quote(val displayText: String, val author: String, val isFavorite: Boolean)
     data class Navigation(
         val navItems: List<Page>,

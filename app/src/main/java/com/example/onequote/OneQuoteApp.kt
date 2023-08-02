@@ -23,6 +23,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.onequote.navigation.HeaderNavigation
+import com.example.onequote.network.NetworkOperation
 
 @Composable
 fun PerformOnLifecycle(
@@ -60,7 +61,10 @@ fun OneQuote(
 
     PerformOnLifecycle(
         lifecycleOwner = lifecycleOwner,
-        onStart = { mainViewModel.fetchQuoteOfTheDay() },
+        onStart = {
+            mainViewModel.fetchQuoteOfTheDay()
+            mainViewModel.fetchAllQuotes()
+        },
         onResume = { })
 
     Column(
@@ -77,7 +81,7 @@ fun OneQuote(
         val selectedPage = appState.navigation.selectedPage
         when (selectedPage.title) {
             "All quotes" -> {
-                TempContent(selectedPage.color)
+                AllQuotesScreen(allQuotesOperation = appState.allQuotes, onFavoriteClicked = {  })
             }
 
             "Daily quote" -> DailyQuoteScreen(

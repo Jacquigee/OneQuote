@@ -40,4 +40,14 @@ class MainActivityViewModel @Inject constructor(
             )
         }
     }
+    fun fetchAllQuotes() = viewModelScope.launch{
+        _appState.update {
+            return@update it.copy(allQuotes = NetworkOperation.Loading())
+        }
+        _appState.update {
+            return@update it.copy(
+                allQuotes = quoteRepository.getAllQuotes()
+            )
+        }
+    }
 }
