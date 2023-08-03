@@ -31,6 +31,13 @@ fun AllQuotesScreen(
     }
 }
 
+sealed class SortOrder(val displayName: String){
+    object Shortest: SortOrder("Shortest")
+    object Longest: SortOrder("Longest")
+    object Author: SortOrder("Author")
+}
+
+
 @Composable
 private fun AllQuotesDisplay(
     quotes: List<AppState.Quote>,
