@@ -1,10 +1,16 @@
 package com.example.onequote
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.onequote.components.LoadingComponent
 import com.example.onequote.components.SingleQuoteListItem
@@ -37,6 +43,18 @@ sealed class SortOrder(val displayName: String){
     object Author: SortOrder("Author")
 }
 
+@Composable
+private fun SortComponent(sortOrder: SortOrder, onNext: () -> Unit, onPrevious: () -> Unit) {
+    Row(horizontalArrangement = Arrangement.Center) {
+        Text(
+            text = sortOrder.displayName,
+            color = Color.Cyan,
+            modifier = Modifier
+                .border(1.dp, color = Color.Cyan)
+                .padding(horizontal = 32.dp, vertical = 12.dp)
+        )
+    }
+}
 
 @Composable
 private fun AllQuotesDisplay(
