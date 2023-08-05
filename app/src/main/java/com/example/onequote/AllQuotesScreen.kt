@@ -9,6 +9,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -61,10 +66,27 @@ private fun AllQuotesDisplay(
     quotes: List<AppState.Quote>,
     onFavoriteClicked: (AppState.Quote) -> Unit
 ) {
+    var currentSortOrder by remember { mutableStateOf<SortOrder>(SortOrder.Shortest) }
+    val sortedQuotes by remember {
+        derivedStateOf {
+            when (currentSortOrder) {
+                SortOrder.Author -> quotes.sortedBy { it.author }
+                SortOrder.Longest -> quotes.sortedByDescending { it.displayText.length }
+                SortOrder.Shortest -> quotes.sortedBy { it.displayText.length }
+            }
+        }
+    }
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 48.dp)
     ) {
+        item {
+            SortComponent(
+                sortOrder = currentSortOrder,
+                onNext = { currentSortOrder = currentSortOrder.getNext() },
+                onPrevious = { currentSortOrder = currentSortOrder.getPrevious() }
+            )
+        }
         items(items = quotes, key = { it.hashCode() }) {
             SingleQuoteListItem(quote = it, onFavoriteClicked = { onFavoriteClicked(it) })
         }
