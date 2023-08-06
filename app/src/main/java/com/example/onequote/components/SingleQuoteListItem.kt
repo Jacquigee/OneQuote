@@ -36,10 +36,11 @@ import com.example.onequote.AppState
 @Composable
 fun SingleQuoteListItem(
     quote: AppState.Quote,
-    onFavoriteClicked: () -> Unit
+    onFavoriteClicked: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(
                 color = Color.Magenta,
                 shape = MaterialTheme.shapes.large
