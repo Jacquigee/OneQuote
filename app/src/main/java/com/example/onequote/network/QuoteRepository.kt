@@ -2,7 +2,6 @@ package com.example.onequote.network
 
 import com.example.onequote.AppState
 import com.example.onequote.domain.mappers.QuoteMapper
-import com.example.onequote.network.models.NetworkQuote
 import javax.inject.Inject
 
 class QuoteRepository @Inject constructor(
